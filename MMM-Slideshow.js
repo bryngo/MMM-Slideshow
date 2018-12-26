@@ -1,7 +1,5 @@
-
 Module.register("MMM-Slideshow", {
     // Default module config
-
     defaults: {
         text: "This is my slideshow!",
 
@@ -15,36 +13,42 @@ Module.register("MMM-Slideshow", {
 
         // 1000 ms = 1s
         updateInterval: 10000,
-        fadeSpeed: 2000
+        fadeSpeed: 2000,
+        random: true
     },
+
+    currentIndex: 0,
 
     getStyles: function() {
        return ["slideshow_style.css"];
     },
 
     start: function() {
-       // Log.info("Starting module: " + this.name);
+        Log.info("Starting module: " + this.name);
 
-        // Schedule update timer.
-
-        var self = this;
-
-        setInterval(function() {
-            self.updateDom(self.config.fadeSpeed);
+        setInterval(() => {
+            this.updateDom(this.config.fadeSpeed);
         }, this.config.updateInterval);
+    },
 
+    getNextPictureSrc() {
+        if (this.config.random === true) {
+			return this.config.pictures[Math.floor(Math.random() * this.config.pictures.length)];
+        } else {
+            if (this.currentIndex >= this.config.pictures.length) {
+                this.currentIndex = 0;
+            }
+
+            return this.config.pictures[this.currentIndex++];
+        }
     },
 
     getDom: function() {
-
-        max = 4;
-        min = 0;
-
         var wrapper = document.createElement("div");
 
         var image = document.createElement("img");
-        image.className = "slide";
-        image.src = this.data.path + this.config.pictures[Math.floor(Math.random() * 5)];
+        image.classList.add("slide");
+        image.src = this.file(this.getNextPictureSrc());
 
         wrapper.appendChild(image);
 

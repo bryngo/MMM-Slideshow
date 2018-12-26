@@ -1,8 +1,6 @@
 Module.register("MMM-Slideshow", {
     // Default module config
     defaults: {
-        text: "This is my slideshow!",
-
         pictures: [
             "images/slide01.jpg",
             "images/slide02.jpg",
